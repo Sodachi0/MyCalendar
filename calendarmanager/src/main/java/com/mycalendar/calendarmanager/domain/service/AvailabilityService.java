@@ -23,8 +23,10 @@ public class AvailabilityService {
     private final ReservationRepository reservationRepository;
 
     private static class UserInfo{
-        private final String username;
-        private final String password;
+        private String username;
+        private String password;
+
+        public UserInfo(){}
         public UserInfo(String username, String password){
             this.username = username;
             this.password = password;
