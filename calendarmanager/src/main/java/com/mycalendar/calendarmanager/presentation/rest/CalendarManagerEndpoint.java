@@ -34,8 +34,8 @@ public class CalendarManagerEndpoint {
     }
 
     private ReservationDTO toReservationDTO(ReservationEntity reservationEntity){
-        return new ReservationDTO(reservationEntity.getAvailabilityId(), reservationEntity.getStart(),
-                reservationEntity.getEnd(), reservationEntity.getTitle());
+        return new ReservationDTO(reservationEntity.getId(),reservationEntity.getAvailabilityId(),
+                reservationEntity.getStart(), reservationEntity.getEnd(), reservationEntity.getTitle());
     }
 
     @GetMapping("/all")
@@ -97,8 +97,12 @@ public class CalendarManagerEndpoint {
         if(!request.isComplete())
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        if (!reservationService.deleteReservation(request.getReservationId(), request.getEmail()))
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        try {
+            if (!reservationService.deleteReservation(request.getReservationId(), request.getEmail()))
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

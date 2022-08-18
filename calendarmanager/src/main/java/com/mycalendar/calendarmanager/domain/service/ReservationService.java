@@ -47,6 +47,12 @@ public class ReservationService {
         if (!IntervalService.isContaining(reservationInterval, availabilityInterval))
             throw new InvalidIntervalException();
 
+        reservationRepository.findAllByAvailabilityId(availabilityId).forEach(reservation -> {
+            IntervalService.Interval interval = new IntervalService.Interval(reservation.getStart(), reservation.getEnd());
+            if (IntervalService.isOverlapping(reservationInterval, interval))
+                throw new InvalidIntervalException();
+        });
+
         return toReservationEntity(reservationRepository.save(new ReservationModel(availabilityId, start, end, title, email)));
     }
 
