@@ -65,7 +65,7 @@ public class IntervalService {
 
     public static boolean isOverlapping(Interval interval1, Interval interval2){
         return interval1.getStart().before(interval2.getEnd())
-                || interval1.getEnd().after(interval2.getStart());
+                && interval1.getEnd().after(interval2.getStart());
     }
 
     public static boolean isDisjoint(Interval interval1, Interval interval2){

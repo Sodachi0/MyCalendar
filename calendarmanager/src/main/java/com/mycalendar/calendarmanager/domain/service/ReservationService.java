@@ -44,7 +44,7 @@ public class ReservationService {
 
         IntervalService.Interval reservationInterval = new IntervalService.Interval(start, end);
         IntervalService.Interval availabilityInterval = new IntervalService.Interval(model.getStart(), model.getEnd());
-        if (!IntervalService.isContaining(reservationInterval, availabilityInterval))
+        if (!IntervalService.isContaining(availabilityInterval, reservationInterval))
             throw new InvalidIntervalException();
 
         reservationRepository.findAllByAvailabilityId(availabilityId).forEach(reservation -> {
