@@ -1,3 +1,226 @@
-<div *ngFor="let av of calendar.availabilities">
-  <div>{{av.id}}</div>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<div class="event-schedule-area-two bg-color pad100">
+  <div class="container" id="main-container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="section-title text-center">
+          <div class="title-text">
+            <h2>Calendar</h2>
+          </div>
+        </div>
+      </div>
+      <!-- /.col end-->
+    </div>
+    <!-- row end-->
+    <div class="row">
+      <div class="col-lg-12">
+        <ul class="nav custom-tab" id="myTab" role="tablist">
+          <li *ngFor="let availability of calendar.availabilities" class="nav-item">
+            <a class="nav-link" id="availability-{{availability.id}}-tab" data-toggle="tab" href="#availability-{{availability.id}}" role="tab" [attr.aria-controls]="'availability-'+availability.id" aria-selected="false">Slot {{availability.id}}</a>
+          </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+          <div *ngFor="let availability of calendar.availabilities" class="tab-pane fade" id="availability-{{availability.id}}" role="tabpanel">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                <tr>
+                  <th scope="col" class="vertical-center"><h2>Title</h2></th>
+                  <th scope="col">
+                    <a>{{availability.start}}</a>
+                    <br>
+                    <a>{{availability.end}}</a>
+                  </th>
+                  <th class="primary-btn text-center" scope="col">
+                    <h2>
+                      <a (click)="onOpenModal('deleteAvailabilityModal', availability, undefined)" class="btn btn-primary">
+                        <i class="fa fa-minus"></i>
+                      </a>
+                    </h2>
+                  </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let reservation of getReservationsByAvailability(availability.id)" class="inner-box">
+                  <td>
+                    <div class="event-wrap">
+                      <h3><a>{{reservation.title}}</a></h3>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="time">
+                      <a>{{reservation.start}}</a>
+                      <br>
+                      <a>{{reservation.end}}</a>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="primary-btn">
+                      <a (click)="onOpenModal('deleteReservationModal', undefined, reservation)" class="btn btn-primary">
+                        <i class="fa fa-minus"></i>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="primary-btn text-center">
+          <a (click)="onOpenModal('createAvailabilityModal')" class="btn btn-primary">
+            <i class="fa fa-plus"></i>
+            New Availability
+          </a>
+          <a (click)="onOpenModal('createReservationModal')" [hidden]="calendar.availabilities.length==0" class="btn btn-primary">
+            <i class="fa fa-plus"></i>
+            New Reservation
+          </a>
+        </div>
+      </div>
+      <!-- /col end-->
+    </div>
+    <!-- /row end-->
+  </div>
+</div>
+
+<!-- Create Availability Modal -->
+<div class="modal fade" id="createAvailabilityModal" tabindex="-1" role="dialog" aria-labelledby="createAvailabilityModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+       <div class="modal-header">
+          <h5 class="modal-title" id="createAvailabilityModalLabel">Create a new Availability</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+       </div>
+       <div class="modal-body">
+          <form #createAvailabilityForm="ngForm" (ngSubmit)="onCreateAvailability(createAvailabilityForm)">
+          <div class="form-group">
+             <label>Start</label>
+             <input type="datetime-local" ngModel name="start" class="form-control" placeholder="Start" required>
+          </div>
+          <div class="form-group">
+             <label>End</label>
+             <input type="datetime-local" ngModel name="end" class="form-control" placeholder="End" required>
+          </div>
+          <div class="form-group">
+             <label>Username</label>
+             <input type="text" ngModel name="username" class="form-control" placeholder="Username" required>
+          </div>
+          <div class="form-group">
+             <label>Password</label>
+             <input type="text" ngModel name="password" class="form-control" placeholder="Password" required>
+          </div>
+          <div class="modal-footer">
+             <button type="button" id="create-availability-close" class="btn btn-secondary" data-dismiss="modal">Close</button>
+             <button [disabled]="createAvailabilityForm.invalid" type="submit" class="btn btn-primary">Submit</button>
+          </div>
+          </form>
+       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Create Reservation Modal -->
+<div class="modal fade" id="createReservationModal" tabindex="-1" role="dialog" aria-labelledby="createReservationModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createReservationModalLabel">Create a new Reservation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #createReservationForm="ngForm" (ngSubmit)="onCreateReservation(createReservationForm)">
+          <div>
+            <label>Slot number</label>
+            <select ngModel name="availabilityId" class="form-control" required>
+              <option *ngFor="let availability of calendar.availabilities" value="{{availability.id}}">{{availability.id}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Start</label>
+            <input type="datetime-local" ngModel name="start" class="form-control" placeholder="Start" required>
+          </div>
+          <div class="form-group">
+            <label>End</label>
+            <input type="datetime-local" ngModel name="end" class="form-control" placeholder="End" required>
+          </div>
+          <div class="form-group">
+            <label>Title</label>
+            <input type="text" ngModel name="title" class="form-control" placeholder="Title" required>
+          </div>
+          <div class="form-group">
+            <label>email</label>
+            <input type="text" ngModel name="email" class="form-control" placeholder="Email" required>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="create-reservation-close" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button [disabled]="createReservationForm.invalid" type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Availability Modal -->
+<div class="modal fade" id="deleteAvailabilityModal" tabindex="-1" role="dialog" aria-labelledby="deleteAvailabilityModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteAvailabilityModalLabel">Remove this Availability (Slot {{availability.id}})</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #deleteAvailabilityForm="ngForm" (ngSubmit)="onDeleteAvailability(deleteAvailabilityForm)">
+          <input type="hidden" ngModel="{{availability.id}}" name="availabilityId" class="form-control">
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" ngModel name="username" class="form-control" placeholder="Username" required>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="text" ngModel name="password" class="form-control" placeholder="Password" required>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="delete-availability-close" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button [disabled]="deleteAvailabilityForm.invalid" type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Reservation Modal -->
+<div class="modal fade" id="deleteReservationModal" tabindex="-1" role="dialog" aria-labelledby="deleteReservationModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteReservationModalLabel">Remove this Reservation ({{reservation.title}})</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #deleteReservationForm="ngForm" (ngSubmit)="onDeleteReservation(deleteReservationForm)">
+          <input type="hidden" ngModel="{{reservation.id}}" name="reservationId" class="form-control">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="text" ngModel name="email" class="form-control" placeholder="Email" required>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="delete-reservation-close" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button [disabled]="deleteReservationForm.invalid" type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
