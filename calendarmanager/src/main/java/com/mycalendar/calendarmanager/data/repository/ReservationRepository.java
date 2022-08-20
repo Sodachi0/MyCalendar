@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface ReservationRepository extends JpaRepository<ReservationModel, Long> {
     void deleteAllByAvailabilityId(Long availabilityId);
-    List<AvailabilityModel> findAllByAvailabilityId(Long availabilityId);
+    List<ReservationModel> findAllByAvailabilityId(Long availabilityId);
 }

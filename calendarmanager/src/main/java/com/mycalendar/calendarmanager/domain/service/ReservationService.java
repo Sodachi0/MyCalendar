@@ -41,7 +41,6 @@ public class ReservationService {
             throw new AvailabilityNotFoundException();
 
         AvailabilityModel model = modelOptional.get();
-
         IntervalService.Interval reservationInterval = new IntervalService.Interval(start, end);
         IntervalService.Interval availabilityInterval = new IntervalService.Interval(model.getStart(), model.getEnd());
         if (!IntervalService.isContaining(availabilityInterval, reservationInterval))

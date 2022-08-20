@@ -48,7 +48,7 @@ public class CalendarManagerEndpoint {
         return new ResponseEntity<>(calendarDetailsResponseDTO, HttpStatus.OK);
     }
 
-    @PostMapping("create/availability")
+    @PostMapping("/create/availability")
     public ResponseEntity<AvailabilityDTO> createAvailability(@RequestBody CreateAvailabilityRequestDTO request){
         if(!request.isComplete())
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -65,7 +65,7 @@ public class CalendarManagerEndpoint {
         return new ResponseEntity<>(toAvailabilityDTO(availabilityEntity), HttpStatus.OK);
     }
 
-    @DeleteMapping("delete/availability")
+    @PostMapping("/delete/availability")
     public ResponseEntity<?> deleteAvailability(@RequestBody DeleteAvailabilityRequestDTO request){
         if(!request.isComplete())
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -77,7 +77,7 @@ public class CalendarManagerEndpoint {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("create/reservation")
+    @PostMapping("/create/reservation")
     public ResponseEntity<ReservationDTO> createReservation(@RequestBody CreateReservationRequestDTO request){
         if(!request.isComplete())
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -92,7 +92,7 @@ public class CalendarManagerEndpoint {
         return new ResponseEntity<>(toReservationDTO(reservationEntity), HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/reservation")
+    @PostMapping("/delete/reservation")
     public ResponseEntity<?> deleteReservation(@RequestBody DeleteReservationRequestDTO request){
         if(!request.isComplete())
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
