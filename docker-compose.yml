@@ -1,0 +1,21 @@
+services:
+  nginx:
+    container_name: nginx
+    image: nginx:1.23-alpine
+    depends_on:
+      - mysql
+    ports:
+      - 4200:80
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./calendarfront/dist/calendarfront/:/etc/nginx/html/
+
+  mysql:
+    container_name: mysql
+    image: mysql:5
+    environment:
+      - MYSQL_ROOT_PASSWORD=pass
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysql/setup.sql:/docker-entrypoint-initdb.d/setup.sql

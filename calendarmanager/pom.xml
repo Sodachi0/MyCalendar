@@ -11,7 +11,8 @@
 	<groupId>com.mycalendar</groupId>
 	<artifactId>calendarmanager</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>calendarmanager</name>
+    <packaging>jar</packaging>
+    <name>calendarmanager</name>
 	<description>A simple calendar manager</description>
 	<properties>
 		<java.version>17</java.version>
@@ -42,7 +43,7 @@
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
