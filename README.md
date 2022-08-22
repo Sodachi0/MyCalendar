@@ -1,6 +1,6 @@
 # MyCalendar
 
-MyCalendar is a availability and reservation management app.
+MyCalendar is an availability and reservation management app.
 
 ## Installation
 
