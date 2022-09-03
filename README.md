@@ -1,18 +1,31 @@
+
 # MyCalendar
 
 MyCalendar is an availability and reservation management app.
 
+## Contact
+
+Raphaël ANDRÉ - raphael.roche1908@gmail.com
+
+## Built with
+
+- Spring boot
+- Maven
+- Angular
+- Docker
+- MySQL
+
 ## Installation
 
-Use git to clone the repository or download the zip.
+Use git to clone the repository or download the [zip](https://github.com/Sodachi0/MyCalendar/archive/refs/heads/main.zip).
 
 ```bash
 git clone git@github.com:Sodachi0/MyCalendar.git
 ```
 
-## You may also install
+## Prerequisites
 
-To make sure MyCalendar work as expected the following tools are needed:
+To make sure MyCalendar work as expected the following prerequisites are needed:
 
 - Java 17
 - Docker
